@@ -139,16 +139,30 @@ export async function sendFreeReport(params: ReportParams): Promise<{ id?: strin
   const { lead, brandName, score } = params;
   const s = score.scoreTotal;
   const fromAddr = FROM || "team@cofiradar.com";
+  const apiKey = process.env.RESEND_API_KEY;
 
-  console.log(`[freeReport] Sending report to ${lead.email} from ${fromAddr}...`);
+  console.log(`[freeReport] Sending to ${lead.email} | from: ${fromAddr} | apiKey: ${apiKey ? apiKey.slice(0, 8) + "..." : "MISSING"}`);
+
+  if (!apiKey) {
+    const msg = "RESEND_API_KEY env var is not set";
+    console.error(`[freeReport] ${msg}`);
+    return { error: msg };
+  }
 
   try {
-    const { data, error } = await getResend().emails.send({
+    const resend = new Resend(apiKey);
+    const result = await resend.emails.send({
       from:    `CoFi Radar <${fromAddr}>`,
       to:      lead.email,
       subject: `Your CoFi Radar report: ${brandName} scored ${s}/100`,
       html:    buildHtml(params),
     });
+
+    console.log(`[freeReport] Resend raw response:`, JSON.stringify(result));
+
+    // Resend v4 returns { data, error }
+    const data = result?.data;
+    const error = result?.error;
 
     if (error) {
       console.error(`[freeReport] Resend error for ${lead.email}:`, JSON.stringify(error));

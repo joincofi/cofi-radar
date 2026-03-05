@@ -30,24 +30,28 @@ export async function GET(req: Request) {
     createdAt:     new Date(),
   } as Parameters<typeof sendFreeReport>[0]["lead"];
 
-  const result = await sendFreeReport({
-    lead:        fakeLead,
-    brandName:   "CoFi Radar",
-    score:       { scoreTotal: 58, scoreVisibility: 62, scoreAccuracy: 55, scoreCompetitive: 50, scoreSentiment: 70 },
-    topFindings: [],
-    topAlert:    {
-      model:    "gpt-4o",
-      question: "What does CoFi Radar do?",
-      detail:   "AI described pricing incorrectly as free tier when no free tier exists.",
-      severity: "high",
-    },
-    lowPresence:  false,
-    competitors:  ["Brandwatch", "Mention"],
-  });
+  try {
+    const result = await sendFreeReport({
+      lead:        fakeLead,
+      brandName:   "CoFi Radar",
+      score:       { scoreTotal: 58, scoreVisibility: 62, scoreAccuracy: 55, scoreCompetitive: 50, scoreSentiment: 70 },
+      topFindings: [],
+      topAlert:    {
+        model:    "gpt-4o",
+        question: "What does CoFi Radar do?",
+        detail:   "AI described pricing incorrectly as free tier when no free tier exists.",
+        severity: "high",
+      },
+      lowPresence:  false,
+      competitors:  ["Brandwatch", "Mention"],
+    });
 
-  if (result.error) {
-    return NextResponse.json({ ok: false, sentTo: to, error: result.error, from: process.env.RESEND_FROM_EMAIL ?? "(not set)" }, { status: 500 });
+    if (result.error) {
+      return NextResponse.json({ ok: false, sentTo: to, error: result.error, from: process.env.RESEND_FROM_EMAIL ?? "(not set)", apiKey: process.env.RESEND_API_KEY ? "set" : "MISSING" }, { status: 500 });
+    }
+
+    return NextResponse.json({ ok: true, sentTo: to, resendId: result.id, from: process.env.RESEND_FROM_EMAIL ?? "(not set)" });
+  } catch (err) {
+    return NextResponse.json({ ok: false, sentTo: to, error: String(err), from: process.env.RESEND_FROM_EMAIL ?? "(not set)", apiKey: process.env.RESEND_API_KEY ? "set" : "MISSING" }, { status: 500 });
   }
-
-  return NextResponse.json({ ok: true, sentTo: to, resendId: result.id, from: process.env.RESEND_FROM_EMAIL ?? "(not set)" });
 }
