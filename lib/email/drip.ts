@@ -180,12 +180,16 @@ export async function scheduleDripEmails(params: DripParams): Promise<boolean> {
   const day3At = new Date(now + 3  * 24 * 60 * 60 * 1000).toISOString();
   const day7At = new Date(now + 7  * 24 * 60 * 60 * 1000).toISOString();
 
+  const delay = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
   try {
-    const results = await Promise.all([
-      sendEmail({ to: email, subject: `Your AI Visibility Score of ${score} — what it means for ${brandName}`, html: day1Html(brandName, score, competitors), scheduledAt: day1At }),
-      sendEmail({ to: email, subject: `What AI says when buyers compare ${brandName} to competitors`,           html: day3Html(brandName, score, competitors), scheduledAt: day3At }),
-      sendEmail({ to: email, subject: `Last note on ${brandName}'s AI visibility`,                             html: day7Html(brandName, score),              scheduledAt: day7At }),
-    ]);
+    // Send sequentially with 700ms gaps to stay under Resend's 2 req/sec rate limit
+    const r1 = await sendEmail({ to: email, subject: `Your AI Visibility Score of ${score} — what it means for ${brandName}`, html: day1Html(brandName, score, competitors), scheduledAt: day1At });
+    await delay(700);
+    const r2 = await sendEmail({ to: email, subject: `What AI says when buyers compare ${brandName} to competitors`,           html: day3Html(brandName, score, competitors), scheduledAt: day3At });
+    await delay(700);
+    const r3 = await sendEmail({ to: email, subject: `Last note on ${brandName}'s AI visibility`,                             html: day7Html(brandName, score),              scheduledAt: day7At });
+    const results = [r1, r2, r3];
 
     const failed = results.filter(r => r.error);
     if (failed.length > 0) {
