@@ -30,7 +30,7 @@ export async function GET(req: Request) {
     createdAt:     new Date(),
   } as Parameters<typeof sendFreeReport>[0]["lead"];
 
-  await sendFreeReport({
+  const result = await sendFreeReport({
     lead:        fakeLead,
     brandName:   "CoFi Radar",
     score:       { scoreTotal: 58, scoreVisibility: 62, scoreAccuracy: 55, scoreCompetitive: 50, scoreSentiment: 70 },
@@ -45,5 +45,9 @@ export async function GET(req: Request) {
     competitors:  ["Brandwatch", "Mention"],
   });
 
-  return NextResponse.json({ ok: true, sentTo: to });
+  if (result.error) {
+    return NextResponse.json({ ok: false, sentTo: to, error: result.error, from: process.env.RESEND_FROM_EMAIL ?? "(not set)" }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true, sentTo: to, resendId: result.id, from: process.env.RESEND_FROM_EMAIL ?? "(not set)" });
 }

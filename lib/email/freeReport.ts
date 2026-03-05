@@ -135,20 +135,30 @@ function buildHtml(p: ReportParams): string {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
-export async function sendFreeReport(params: ReportParams): Promise<void> {
+export async function sendFreeReport(params: ReportParams): Promise<{ id?: string; error?: string }> {
   const { lead, brandName, score } = params;
   const s = score.scoreTotal;
+  const fromAddr = FROM || "team@cofiradar.com";
+
+  console.log(`[freeReport] Sending report to ${lead.email} from ${fromAddr}...`);
 
   try {
-    const result = await getResend().emails.send({
-      from:    FROM,
+    const { data, error } = await getResend().emails.send({
+      from:    `CoFi Radar <${fromAddr}>`,
       to:      lead.email,
       subject: `Your CoFi Radar report: ${brandName} scored ${s}/100`,
       html:    buildHtml(params),
     });
-    console.log(`[freeReport] Sent report to ${lead.email} — id: ${(result as { data?: { id?: string } }).data?.id ?? "?"}`);
+
+    if (error) {
+      console.error(`[freeReport] Resend error for ${lead.email}:`, JSON.stringify(error));
+      return { error: JSON.stringify(error) };
+    }
+
+    console.log(`[freeReport] Sent report to ${lead.email} — id: ${data?.id}`);
+    return { id: data?.id };
   } catch (err) {
-    console.error(`[freeReport] Failed to send report to ${lead.email}:`, err);
-    throw err;
+    console.error(`[freeReport] Exception sending to ${lead.email}:`, err);
+    return { error: String(err) };
   }
 }
