@@ -3,11 +3,9 @@
  * Called by freeScan.ts right after the score is computed.
  */
 
-import { Resend } from "resend";
 import type { Lead } from "@prisma/client";
 import type { ScoreData } from "@/lib/scoring/computeScore";
 
-const getResend = () => new Resend(process.env.RESEND_API_KEY);
 const FROM    = process.env.RESEND_FROM_EMAIL!;
 const BASE    = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
 
@@ -150,27 +148,30 @@ export async function sendFreeReport(params: ReportParams): Promise<{ id?: strin
   }
 
   try {
-    const resend = new Resend(apiKey);
-    const result = await resend.emails.send({
-      from:    `CoFi Radar <${fromAddr}>`,
-      to:      lead.email,
-      subject: `Your CoFi Radar report: ${brandName} scored ${s}/100`,
-      html:    buildHtml(params),
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from:    `CoFi Radar <${fromAddr}>`,
+        to:      [lead.email],
+        subject: `Your CoFi Radar report: ${brandName} scored ${s}/100`,
+        html:    buildHtml(params),
+      }),
     });
 
-    console.log(`[freeReport] Resend raw response:`, JSON.stringify(result));
+    const body = await res.json();
+    console.log(`[freeReport] Resend HTTP ${res.status}:`, JSON.stringify(body));
 
-    // Resend v4 returns { data, error }
-    const data = result?.data;
-    const error = result?.error;
-
-    if (error) {
-      console.error(`[freeReport] Resend error for ${lead.email}:`, JSON.stringify(error));
-      return { error: JSON.stringify(error) };
+    if (!res.ok) {
+      console.error(`[freeReport] Resend error for ${lead.email}:`, JSON.stringify(body));
+      return { error: JSON.stringify(body) };
     }
 
-    console.log(`[freeReport] Sent report to ${lead.email} — id: ${data?.id}`);
-    return { id: data?.id };
+    console.log(`[freeReport] Sent report to ${lead.email} — id: ${body.id}`);
+    return { id: body.id };
   } catch (err) {
     console.error(`[freeReport] Exception sending to ${lead.email}:`, err);
     return { error: String(err) };
