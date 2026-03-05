@@ -15,6 +15,25 @@ import type { ExtractionData } from "@/lib/agents/extractAnswer";
 const getAnthropic = () => new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const getOpenAI    = () => new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
+// ─── Pricing (USD per token) ──────────────────────────────────────────────────
+
+const PRICE = {
+  sonnet: { in: 3.00  / 1_000_000, out: 15.00 / 1_000_000 }, // claude-sonnet-4-20250514
+  haiku:  { in: 0.80  / 1_000_000, out:  4.00 / 1_000_000 }, // claude-haiku-4-20250514
+  gpt4o:  { in: 2.50  / 1_000_000, out: 10.00 / 1_000_000 }, // gpt-4o
+} as const;
+
+type TokenBucket = { in: number; out: number };
+type TokenUsage  = { sonnet: TokenBucket; haiku: TokenBucket; gpt4o: TokenBucket };
+
+function calcCost(t: TokenUsage): number {
+  return (
+    t.sonnet.in  * PRICE.sonnet.in  + t.sonnet.out * PRICE.sonnet.out +
+    t.haiku.in   * PRICE.haiku.in   + t.haiku.out  * PRICE.haiku.out  +
+    t.gpt4o.in   * PRICE.gpt4o.in   + t.gpt4o.out  * PRICE.gpt4o.out
+  );
+}
+
 // ─── Homepage scraper ────────────────────────────────────────────────────────
 
 async function scrapeHomepage(domain: string): Promise<string> {
@@ -46,7 +65,7 @@ interface BrandProfile {
   competitors: string[];
 }
 
-async function researchBrand(domain: string, pageText: string): Promise<BrandProfile> {
+async function researchBrand(domain: string, pageText: string, tokens: TokenUsage): Promise<BrandProfile> {
   const res = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 500,
@@ -67,6 +86,9 @@ Return JSON:
 }`,
     }],
   });
+
+  tokens.sonnet.in  += res.usage.input_tokens;
+  tokens.sonnet.out += res.usage.output_tokens;
 
   try {
     const block = res.content[0];
@@ -137,7 +159,8 @@ async function miniExtract(
   brandDomain: string,
   competitors: string[],
   question: string,
-  answer: string
+  answer: string,
+  tokens: TokenUsage,
 ): Promise<ExtractionData> {
   try {
     const res = await getAnthropic().messages.create({
@@ -163,6 +186,8 @@ Return JSON:
 }`,
       }],
     });
+    tokens.haiku.in  += res.usage.input_tokens;
+    tokens.haiku.out += res.usage.output_tokens;
     const block = res.content[0];
     const text  = block.type === "text" ? block.text : "";
     const clean = text.replace(/```json\n?|\n?```/g, "").trim();
@@ -190,7 +215,7 @@ const BUYER_SYSTEM = `You are answering a software buyer's question honestly.
 If unsure about specifics like pricing or policies, say so explicitly.
 Keep your answer focused and under 250 words.`;
 
-async function callGPT(prompt: string): Promise<string> {
+async function callGPT(prompt: string, tokens: TokenUsage): Promise<string> {
   try {
     const res = await getOpenAI().chat.completions.create({
       model: "gpt-4o",
@@ -200,11 +225,13 @@ async function callGPT(prompt: string): Promise<string> {
         { role: "user",   content: prompt },
       ],
     });
+    tokens.gpt4o.in  += res.usage?.prompt_tokens     ?? 0;
+    tokens.gpt4o.out += res.usage?.completion_tokens ?? 0;
     return res.choices[0]?.message?.content ?? "";
   } catch { return ""; }
 }
 
-async function callClaude(prompt: string): Promise<string> {
+async function callClaude(prompt: string, tokens: TokenUsage): Promise<string> {
   try {
     const res = await getAnthropic().messages.create({
       model: "claude-sonnet-4-20250514",
@@ -212,6 +239,8 @@ async function callClaude(prompt: string): Promise<string> {
       system: BUYER_SYSTEM,
       messages: [{ role: "user", content: prompt }],
     });
+    tokens.sonnet.in  += res.usage.input_tokens;
+    tokens.sonnet.out += res.usage.output_tokens;
     const block = res.content[0];
     return block.type === "text" ? block.text : "";
   } catch { return ""; }
@@ -224,9 +253,16 @@ export async function runFreeScan(leadId: string): Promise<void> {
 
   console.log(`[freeScan] Starting scan for ${lead.domain}`);
 
+  // Token accumulator — threaded through all API calls
+  const tokens: TokenUsage = {
+    sonnet: { in: 0, out: 0 },
+    haiku:  { in: 0, out: 0 },
+    gpt4o:  { in: 0, out: 0 },
+  };
+
   // 1. Scrape + research brand
   const pageText = await scrapeHomepage(lead.domain);
-  const profile  = await researchBrand(lead.domain, pageText);
+  const profile  = await researchBrand(lead.domain, pageText, tokens);
 
   // Update lead with discovered brand info
   await prisma.lead.update({
@@ -259,8 +295,8 @@ export async function runFreeScan(leadId: string): Promise<void> {
     const prompt = hydrate(query.text);
 
     const [gptAnswer, claudeAnswer] = await Promise.all([
-      callGPT(prompt),
-      callClaude(prompt),
+      callGPT(prompt, tokens),
+      callClaude(prompt, tokens),
     ]);
 
     for (const [model, answer] of [["ChatGPT", gptAnswer], ["Claude", claudeAnswer]] as const) {
@@ -270,7 +306,8 @@ export async function runFreeScan(leadId: string): Promise<void> {
         lead.domain,
         profile.competitors,
         prompt,
-        answer
+        answer,
+        tokens,
       );
       extractions.push({ ...extraction, query: prompt });
       findings.push({ model, question: prompt, answer, extraction });
@@ -321,10 +358,12 @@ export async function runFreeScan(leadId: string): Promise<void> {
     competitors: profile.competitors,
   });
 
-  // 8. Mark report sent
+  // 8. Mark report sent + store cost
+  const costUsd = calcCost(tokens);
+  console.log(`[freeScan] Cost for ${lead.domain}: $${costUsd.toFixed(4)} | tokens:`, JSON.stringify(tokens));
   await prisma.lead.update({
     where: { id: leadId },
-    data: { reportSent: true },
+    data: { reportSent: true, costUsd, tokenUsage: tokens },
   });
 
   // 9. Schedule 3-email drip sequence (day 1, 3, 7) — fire and forget

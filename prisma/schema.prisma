@@ -96,6 +96,9 @@ model Lead {
   converted  Boolean  @default(false)
   // Drip sequence (3 emails scheduled via Resend scheduledAt)
   dripScheduled Boolean @default(false)
+  // Cost tracking
+  costUsd    Float?    // actual API spend for this scan
+  tokenUsage Json?     // { sonnet:{in,out}, haiku:{in,out}, gpt4o:{in,out} }
   createdAt  DateTime @default(now())
   scannedAt  DateTime?
 }
