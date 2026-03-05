@@ -7,10 +7,9 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { prisma } from "@/lib/prisma";
 import { weeklyRun } from "@/lib/jobs/weeklyRun";
-import { Resend } from "resend";
+import { sendEmail } from "@/lib/email/send";
 
 const getAnthropic = () => new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-const getResend = () => new Resend(process.env.RESEND_API_KEY);
 
 // ─── Query generation ─────────────────────────────────────────────────────────
 
@@ -148,10 +147,9 @@ Return JSON:
 // ─── Welcome email ────────────────────────────────────────────────────────────
 
 async function sendWelcomeEmail(clientEmail: string, brandName: string): Promise<void> {
-  const base = process.env.NEXTAUTH_URL ?? "http://localhost:3000";
-  await getResend().emails.send({
-    from: process.env.RESEND_FROM_EMAIL!,
-    to:   clientEmail,
+  const base = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
+  const result = await sendEmail({
+    to:      clientEmail,
     subject: `Welcome to CoFi Radar — your first scan is running`,
     html: `<!DOCTYPE html>
 <html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#FAF7F4;padding:32px 16px;margin:0;">
@@ -180,6 +178,11 @@ async function sendWelcomeEmail(clientEmail: string, brandName: string): Promise
 </td></tr></table>
 </body></html>`,
   });
+  if (result.error) {
+    console.error(`[onboard] Welcome email failed for ${clientEmail}:`, result.error);
+  } else {
+    console.log(`[onboard] Welcome email sent to ${clientEmail} — id: ${result.id}`);
+  }
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────

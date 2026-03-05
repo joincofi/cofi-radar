@@ -15,7 +15,7 @@ import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "@/lib/prisma";
 import { onboardBrand } from "@/lib/agents/onboard";
-import { Resend } from "resend";
+import { sendEmail } from "@/lib/email/send";
 
 export const dynamic = "force-dynamic";
 
@@ -28,12 +28,11 @@ const BG     = "#FAF7F4";
 
 // ─── Email helpers ────────────────────────────────────────────────────────────
 
-async function sendCancellationEmail(resend: Resend, clientEmail: string, brandName: string, periodEnd: Date) {
-  const base = process.env.NEXTAUTH_URL ?? "https://cofi-radar.com";
+async function sendCancellationEmail(clientEmail: string, brandName: string, periodEnd: Date) {
+  const base = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
   const endStr = periodEnd.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-  await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL!,
-    to:   clientEmail,
+  await sendEmail({
+    to:      clientEmail,
     subject: `Your CoFi Radar subscription has been cancelled`,
     html: `<!DOCTYPE html>
 <html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:${BG};padding:32px 16px;margin:0;">
@@ -62,11 +61,10 @@ async function sendCancellationEmail(resend: Resend, clientEmail: string, brandN
   });
 }
 
-async function sendDunningEmail(resend: Resend, clientEmail: string, brandName: string) {
-  const base = process.env.NEXTAUTH_URL ?? "https://cofi-radar.com";
-  await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL!,
-    to:   clientEmail,
+async function sendDunningEmail(clientEmail: string, brandName: string) {
+  const base = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
+  await sendEmail({
+    to:      clientEmail,
     subject: `Action required: payment failed for CoFi Radar`,
     html: `<!DOCTYPE html>
 <html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:${BG};padding:32px 16px;margin:0;">
@@ -93,10 +91,9 @@ async function sendDunningEmail(resend: Resend, clientEmail: string, brandName: 
   });
 }
 
-async function sendPaymentRestoredEmail(resend: Resend, clientEmail: string, brandName: string) {
-  await resend.emails.send({
-    from: process.env.RESEND_FROM_EMAIL!,
-    to:   clientEmail,
+async function sendPaymentRestoredEmail(clientEmail: string, brandName: string) {
+  await sendEmail({
+    to:      clientEmail,
     subject: `Payment restored — CoFi Radar is back`,
     html: `<!DOCTYPE html>
 <html><body style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:${BG};padding:32px 16px;margin:0;">
@@ -150,7 +147,6 @@ export async function POST(req: Request) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-02-24.acacia",
   });
-  const resend = new Resend(process.env.RESEND_API_KEY);
 
   const body      = await req.text();
   const signature = req.headers.get("stripe-signature") ?? "";
@@ -244,7 +240,7 @@ export async function POST(req: Request) {
         });
 
         const periodEnd = new Date((sub as Stripe.Subscription & { current_period_end: number }).current_period_end * 1000);
-        await sendCancellationEmail(resend, brand.clientEmail, brand.name, periodEnd);
+        await sendCancellationEmail(brand.clientEmail, brand.name, periodEnd);
 
         console.log(`[webhook] Subscription cancelled for ${brand.domain}`);
         break;
@@ -266,7 +262,7 @@ export async function POST(req: Request) {
           data: { status: "past_due" },
         });
 
-        await sendDunningEmail(resend, brand.clientEmail, brand.name);
+        await sendDunningEmail(brand.clientEmail, brand.name);
         console.log(`[webhook] Payment failed for ${brand.domain}`);
         break;
       }
@@ -288,7 +284,7 @@ export async function POST(req: Request) {
             where: { id: brand.id },
             data: { status: "active" },
           });
-          await sendPaymentRestoredEmail(resend, brand.clientEmail, brand.name);
+          await sendPaymentRestoredEmail(brand.clientEmail, brand.name);
           console.log(`[webhook] Payment restored for ${brand.domain}`);
         }
         break;

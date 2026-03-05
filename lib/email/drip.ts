@@ -8,11 +8,9 @@
  * Day 7  → "Last look — your window is closing"
  */
 
-import { Resend } from "resend";
+import { sendEmail } from "@/lib/email/send";
 
-const getResend = () => new Resend(process.env.RESEND_API_KEY);
-const FROM    = process.env.RESEND_FROM_EMAIL!;
-const BASE    = process.env.NEXTAUTH_URL ?? "https://cofi-radar.com";
+const BASE    = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
 const PRICE_M = process.env.STRIPE_PRICE_MONTHLY ?? "";
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
@@ -183,29 +181,17 @@ export async function scheduleDripEmails(params: DripParams): Promise<boolean> {
   const day7At = new Date(now + 7  * 24 * 60 * 60 * 1000).toISOString();
 
   try {
-    await Promise.all([
-      getResend().emails.send({
-        from:        FROM,
-        to:          email,
-        subject:     `Your AI Visibility Score of ${score} — what it means for ${brandName}`,
-        html:        day1Html(brandName, score, competitors),
-        scheduledAt: day1At,
-      }),
-      getResend().emails.send({
-        from:        FROM,
-        to:          email,
-        subject:     `What AI says when buyers compare ${brandName} to competitors`,
-        html:        day3Html(brandName, score, competitors),
-        scheduledAt: day3At,
-      }),
-      getResend().emails.send({
-        from:        FROM,
-        to:          email,
-        subject:     `Last note on ${brandName}'s AI visibility`,
-        html:        day7Html(brandName, score),
-        scheduledAt: day7At,
-      }),
+    const results = await Promise.all([
+      sendEmail({ to: email, subject: `Your AI Visibility Score of ${score} — what it means for ${brandName}`, html: day1Html(brandName, score, competitors), scheduledAt: day1At }),
+      sendEmail({ to: email, subject: `What AI says when buyers compare ${brandName} to competitors`,           html: day3Html(brandName, score, competitors), scheduledAt: day3At }),
+      sendEmail({ to: email, subject: `Last note on ${brandName}'s AI visibility`,                             html: day7Html(brandName, score),              scheduledAt: day7At }),
     ]);
+
+    const failed = results.filter(r => r.error);
+    if (failed.length > 0) {
+      console.error(`[drip] ${failed.length} email(s) failed for ${email}:`, failed.map(f => f.error).join(", "));
+      return false;
+    }
 
     console.log(`[drip] Scheduled 3 emails for ${email} at +1d, +3d, +7d`);
     return true;
