@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing &mdash; CoFi Index</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-logo">CoFi<span>Index</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="how-it-works.html">How It Works</a></li>
+        <li><a href="cofi-50.html">CoFi 50</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="pricing.html" class="active">Pricing</a></li>
+        <li><a href="access.html" class="nav-cta">Request Access</a></li>
+      </ul>
+      <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <div class="section-label">Pricing</div>
+      <h2 class="section-title">Access</h2>
+      <div class="section-desc">Two license tiers. No self-serve. Participation is reviewed.</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Enterprise License</h3>
+          <div class="price">$150,000 <span class="price-period">/ year</span></div>
+        </div>
+        <div class="pricing-card">
+          <h3>Institutional / Hedge Fund</h3>
+          <div class="price">$300,000 <span class="price-period">/ year</span></div>
+        </div>
+      </div>
+
+      <p class="pricing-note">Access is limited. Participation is reviewed.</p>
+
+      <div class="pricing-cta">
+        <a href="access.html" class="btn-primary">Request Access</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <ul class="footer-links">
+          <li><a href="index.html">About</a></li>
+          <li><a href="methodology.html">Methodology</a></li>
+          <li><a href="access.html">Request Access</a></li>
+          <li><a href="mailto:contact@cofiindex.com">Contact</a></li>
+        </ul>
+        <div class="footer-copy">&copy; CoFi Index. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>

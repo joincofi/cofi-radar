@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── NextAuth required tables ───────────────────────────────────────────────
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── CoFi Radar domain models ───────────────────────────────────────────────
+
+model Brand {
+  id                   String   @id @default(uuid())
+  name                 String
+  domain               String   @unique
+  industry             String
+  description          String
+  competitorDomains    String[]
+  clientEmail          String   @unique
+  // Stripe billing
+  stripeCustomerId     String?  @unique
+  stripeSubscriptionId String?  @unique
+  stripePriceId        String?
+  status               String   @default("active") // active | past_due | cancelled | paused
+  // Integrations
+  slackWebhookUrl      String?  // optional Slack webhook for critical alerts
+  createdAt            DateTime @default(now())
+
+  runs            Run[]
+  responses       Response[]
+  scores          Score[]
+  alerts          Alert[]
+  recommendations Recommendation[]
+}
+
+// ─── Acquisition funnel ──────────────────────────────────────────────────────
+
+model Lead {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  domain     String
+  // Brand profile extracted during free scan
+  brandName  String?
+  industry   String?
+  competitors String[]
+  // Free scan results
+  score      Int?
+  reportSent Boolean  @default(false)
+  converted  Boolean  @default(false)
+  // Drip sequence (3 emails scheduled via Resend scheduledAt)
+  dripScheduled Boolean @default(false)
+  createdAt  DateTime @default(now())
+  scannedAt  DateTime?
+}
+
+model Query {
+  id       String  @id @default(uuid())
+  intent   String
+  text     String
+  priority Int
+  active   Boolean @default(true)
+
+  responses Response[]
+}
+
+model Run {
+  id         String    @id @default(uuid())
+  brandId    String
+  brand      Brand     @relation(fields: [brandId], references: [id])
+  status     String
+  startedAt  DateTime?
+  finishedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  responses       Response[]
+  scores          Score[]
+  recommendations Recommendation[]
+}
+
+model Response {
+  id        String   @id @default(uuid())
+  runId     String
+  run       Run      @relation(fields: [runId], references: [id])
+  brandId   String
+  brand     Brand    @relation(fields: [brandId], references: [id])
+  queryId   String
+  query     Query    @relation(fields: [queryId], references: [id])
+  modelName String
+  prompt    String
+  rawAnswer String   @db.Text
+  createdAt DateTime @default(now())
+
+  extraction Extraction?
+}
+
+model Extraction {
+  id                 String   @id @default(uuid())
+  responseId         String   @unique
+  response           Response @relation(fields: [responseId], references: [id])
+  brandMentioned     Boolean
+  mentionRank        Int?
+  sentiment          String
+  competitorMentions String[]
+  claims             Json
+  riskFlags          Json
+  confidence         Float
+  createdAt          DateTime @default(now())
+}
+
+model Score {
+  id               String   @id @default(uuid())
+  runId            String
+  run              Run      @relation(fields: [runId], references: [id])
+  brandId          String
+  brand            Brand    @relation(fields: [brandId], references: [id])
+  scoreTotal       Float
+  scoreVisibility  Float
+  scoreAccuracy    Float
+  scoreCompetitive Float
+  scoreSentiment   Float
+  createdAt        DateTime @default(now())
+}
+
+model Alert {
+  id        String   @id @default(uuid())
+  brandId   String
+  brand     Brand    @relation(fields: [brandId], references: [id])
+  severity  String
+  type      String
+  message   String
+  evidence  Json
+  status    String   @default("queued")
+  createdAt DateTime @default(now())
+}
+
+model Recommendation {
+  id             String   @id @default(uuid())
+  runId          String
+  run            Run      @relation(fields: [runId], references: [id])
+  brandId        String
+  brand          Brand    @relation(fields: [brandId], references: [id])
+  priority       String
+  title          String
+  rationale      String   @db.Text
+  exactActions   Json
+  expectedImpact String
+  createdAt      DateTime @default(now())
+}

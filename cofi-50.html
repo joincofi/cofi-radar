@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The CoFi 50 &mdash; CoFi Index</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-logo">CoFi<span>Index</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="how-it-works.html">How It Works</a></li>
+        <li><a href="cofi-50.html" class="active">CoFi 50</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="access.html" class="nav-cta">Request Access</a></li>
+      </ul>
+      <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <div class="section-label">Coverage</div>
+      <h2 class="section-title">The CoFi 50</h2>
+      <div class="section-desc">The index tracks approximately 50 recognizable AI-related product capabilities, grouped into five high-level expectation areas. Individual capabilities inherit status from their category.</div>
+    </div>
+  </div>
+
+  <!-- Capability Areas -->
+  <section>
+    <div class="container">
+      <div class="capability-areas">
+        <div class="capability-area">
+          <div class="area-num">I</div>
+          <div class="area-label">Content &amp; Generation</div>
+        </div>
+        <div class="capability-area">
+          <div class="area-num">II</div>
+          <div class="area-label">Search &amp; Retrieval</div>
+        </div>
+        <div class="capability-area">
+          <div class="area-num">III</div>
+          <div class="area-label">Personalization</div>
+        </div>
+        <div class="capability-area">
+          <div class="area-num">IV</div>
+          <div class="area-label">Automation</div>
+        </div>
+        <div class="capability-area">
+          <div class="area-num">V</div>
+          <div class="area-label">Intelligence &amp; Insight</div>
+        </div>
+      </div>
+
+      <p class="cofi-note">This reflects user expectations, not implementation choices or vendors. What matters is whether the capability is expected to exist &mdash; not how it is built.</p>
+    </div>
+  </section>
+
+  <!-- The Benchmark 100 -->
+  <section>
+    <div class="container">
+      <div class="section-label">Panel</div>
+      <h2 class="section-title">The Benchmark 100</h2>
+      <div class="section-desc">A curated, anonymized panel of senior practitioners. No names. No company-specific data. Only aggregated professional judgment.</div>
+
+      <div class="panel-attrs">
+        <div class="panel-attr">Senior product, design, and engineering leaders</div>
+        <div class="panel-attr">Mid-market and enterprise-scale companies</div>
+        <div class="panel-attr">Enterprise SaaS, vertical software, and consumer technology</div>
+        <div class="panel-attr">B2B and enterprise-facing products</div>
+      </div>
+
+      <div class="exclusion-note">
+        <h4>Panel Governance</h4>
+        <ul>
+          <li>Foundation model providers and core AI infrastructure vendors are excluded</li>
+          <li>Responses are anonymized and aggregated</li>
+          <li>No confidential or company-specific data is collected</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <ul class="footer-links">
+          <li><a href="index.html">About</a></li>
+          <li><a href="methodology.html">Methodology</a></li>
+          <li><a href="access.html">Request Access</a></li>
+          <li><a href="mailto:contact@cofiindex.com">Contact</a></li>
+        </ul>
+        <div class="footer-copy">&copy; CoFi Index. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>

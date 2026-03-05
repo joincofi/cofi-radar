@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The CoFi Index</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-logo">CoFi<span>Index</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="how-it-works.html">How It Works</a></li>
+        <li><a href="cofi-50.html">CoFi 50</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="access.html" class="nav-cta">Request Access</a></li>
+      </ul>
+      <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <h1>Know when AI expectations become <span class="highlight">non-negotiable.</span></h1>
+        <p class="hero-sub">The CoFi Index tracks when AI capabilities shift from optional to industry standard &mdash; so teams don't get caught behind.</p>
+        <p class="hero-supporting">// A calm, conservative signal derived from real expectation pressure, not hype or prediction.</p>
+        <div class="hero-actions">
+          <a href="access.html" class="btn-primary">Request Access</a>
+          <a href="methodology.html" class="btn-secondary">View Methodology</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What CoFi Is / Is Not -->
+  <section>
+    <div class="container">
+      <div class="section-label">Definition</div>
+      <h2 class="section-title">What CoFi is. And what it is not.</h2>
+      <div class="section-desc">Clarity on purpose reduces misapplication.</div>
+      <div class="two-col">
+        <div class="col-card col-is">
+          <h3><span class="icon"></span> What CoFi Is</h3>
+          <ul>
+            <li>A benchmark of current market expectations</li>
+            <li>A risk signal for missing required capabilities</li>
+            <li>A conservative, slow-moving index</li>
+            <li>Designed for executive decision-making</li>
+          </ul>
+        </div>
+        <div class="col-card col-not">
+          <h3><span class="icon"></span> What CoFi Is Not</h3>
+          <ul>
+            <li>Not a trend report</li>
+            <li>Not a forecasting platform</li>
+            <li>Not vendor analysis</li>
+            <li>Not hype-driven</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who It's For -->
+  <section>
+    <div class="container">
+      <div class="section-label">Audience</div>
+      <h2 class="section-title">Who it's for</h2>
+      <div class="section-desc"></div>
+
+      <div class="audience-cards">
+        <div class="audience-card">
+          <h3>Enterprise Leaders</h3>
+          <ul>
+            <li>Avoid being caught behind shifting expectations</li>
+            <li>Defend roadmap decisions with external consensus</li>
+            <li>Reduce surprise-driven spending</li>
+          </ul>
+        </div>
+        <div class="audience-card">
+          <h3>Product &amp; Platform Teams</h3>
+          <ul>
+            <li>Know what's table stakes</li>
+            <li>Know what's emerging</li>
+            <li>Avoid overbuilding too early</li>
+          </ul>
+        </div>
+        <div class="audience-card">
+          <h3>Hedge Funds &amp; Investors</h3>
+          <ul>
+            <li>Detect obligation formation early</li>
+            <li>Model cost pressure before earnings</li>
+            <li>Identify downstream to upstream impact</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <ul class="footer-links">
+          <li><a href="index.html">About</a></li>
+          <li><a href="methodology.html">Methodology</a></li>
+          <li><a href="access.html">Request Access</a></li>
+          <li><a href="mailto:contact@cofiindex.com">Contact</a></li>
+        </ul>
+        <div class="footer-copy">&copy; CoFi Index. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>

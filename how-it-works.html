@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How It Works &mdash; CoFi Index</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-logo">CoFi<span>Index</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="how-it-works.html" class="active">How It Works</a></li>
+        <li><a href="cofi-50.html">CoFi 50</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="access.html" class="nav-cta">Request Access</a></li>
+      </ul>
+      <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <div class="section-label">Process</div>
+      <h2 class="section-title">How the index works</h2>
+      <div class="section-desc">Four steps, repeated weekly. Designed to resist noise and reward consensus.</div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <section>
+    <div class="container">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div>
+            <h4>Panel input</h4>
+            <p>A curated panel of ~100 senior product, design, and engineering leaders ("The Benchmark 100") answers the same question weekly:</p>
+            <p class="quote">"If a credible product launched today without this capability, would it be perceived as behind?"</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div>
+            <h4>Three-state aggregation</h4>
+            <p>Responses are aggregated into three observable states:</p>
+            <div class="status-row">
+              <span class="status-chip status-not-expected"><span class="dot"></span>Not Expected</span>
+              <span class="status-chip status-optional"><span class="dot"></span>Optional</span>
+              <span class="status-chip status-standard"><span class="dot"></span>Industry Standard</span>
+            </div>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div>
+            <h4>Conservative movement rules</h4>
+            <p>Upgrades require sustained agreement. Downgrades require prolonged confirmation. Most weeks show no change by design.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">04</div>
+          <div>
+            <h4>Weekly delivery</h4>
+            <p>Customers receive a weekly email and dashboard update showing current status and direction of expectation (Increasing or Stable).</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sample table -->
+      <div class="sample-table-wrap">
+        <table class="sample-table">
+          <thead>
+            <tr>
+              <th>Capability</th>
+              <th>Status</th>
+              <th>Direction</th>
+              <th>Weeks at Current</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>In-product search (semantic)</td>
+              <td><span class="table-status status-standard"><span class="dot"></span>Industry Standard</span></td>
+              <td><span class="table-direction">Stable</span></td>
+              <td class="table-weeks">18</td>
+            </tr>
+            <tr>
+              <td>AI-assisted content generation</td>
+              <td><span class="table-status status-optional"><span class="dot"></span>Optional</span></td>
+              <td><span class="table-direction increasing">Increasing</span></td>
+              <td class="table-weeks">6</td>
+            </tr>
+            <tr>
+              <td>Autonomous workflow agents</td>
+              <td><span class="table-status status-not-expected"><span class="dot"></span>Not Expected</span></td>
+              <td><span class="table-direction">Stable</span></td>
+              <td class="table-weeks">12</td>
+            </tr>
+            <tr>
+              <td>Personalized onboarding (AI)</td>
+              <td><span class="table-status status-optional"><span class="dot"></span>Optional</span></td>
+              <td><span class="table-direction">Stable</span></td>
+              <td class="table-weeks">9</td>
+            </tr>
+            <tr>
+              <td>Predictive analytics dashboard</td>
+              <td><span class="table-status status-optional"><span class="dot"></span>Optional</span></td>
+              <td><span class="table-direction increasing">Increasing</span></td>
+              <td class="table-weeks">4</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Expectation Direction -->
+  <section>
+    <div class="container">
+      <div class="section-label">Signals</div>
+      <h2 class="section-title">Expectation direction</h2>
+      <div class="section-desc">Each tracked capability includes a direction indicator. This reflects the trend in panel sentiment, not a forecast.</div>
+
+      <div class="direction-grid">
+        <div class="direction-card">
+          <h4><span class="arrow arrow-up">&#8599;</span> Increasing</h4>
+          <p>Expectation pressure is building. Teams should prepare for a potential status change and assess readiness.</p>
+        </div>
+        <div class="direction-card">
+          <h4><span class="arrow arrow-stable">&#8594;</span> Stable</h4>
+          <p>No meaningful change in panel sentiment. Current classification reflects ongoing consensus.</p>
+        </div>
+      </div>
+
+      <div class="direction-note">CoFi provides early warning when obligations are rising. It does not speculate on when relief might come.</div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <ul class="footer-links">
+          <li><a href="index.html">About</a></li>
+          <li><a href="methodology.html">Methodology</a></li>
+          <li><a href="access.html">Request Access</a></li>
+          <li><a href="mailto:contact@cofiindex.com">Contact</a></li>
+        </ul>
+        <div class="footer-copy">&copy; CoFi Index. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>

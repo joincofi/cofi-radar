@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Request Access &mdash; CoFi Index</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-logo">CoFi<span>Index</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="how-it-works.html">How It Works</a></li>
+        <li><a href="cofi-50.html">CoFi 50</a></li>
+        <li><a href="methodology.html">Methodology</a></li>
+        <li><a href="pricing.html">Pricing</a></li>
+        <li><a href="access.html" class="nav-cta active">Request Access</a></li>
+      </ul>
+      <button class="nav-hamburger" id="navToggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="page-header">
+    <div class="container">
+      <div class="section-label">Access</div>
+      <h2 class="section-title">Request access to the CoFi Index</h2>
+      <div class="section-desc">Access is reviewed. Provide your details and we will respond within two business days.</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="container">
+      <div class="access-form-wrap">
+        <form action="#" method="POST" onsubmit="return false;">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Work Email</label>
+            <input type="email" id="email" name="email" placeholder="jane@company.com" required>
+          </div>
+          <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Company name" required>
+          </div>
+          <div class="form-group">
+            <label for="title">Title / Role</label>
+            <input type="text" id="title" name="title" placeholder="Chief Product Officer">
+          </div>
+          <div class="form-group">
+            <label for="license">License Type</label>
+            <select id="license" name="license">
+              <option value="" disabled selected>Select license type</option>
+              <option value="enterprise">Enterprise License &mdash; $150,000 / year</option>
+              <option value="institutional">Institutional / Hedge Fund &mdash; $300,000 / year</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="notes">Additional Notes</label>
+            <textarea id="notes" name="notes" placeholder="Optional. Describe your use case or team context."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">Submit Request</button>
+        </form>
+
+        <p class="pricing-note" style="margin-top: 32px;">Submissions are reviewed individually. Not all requests are approved.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="gradient-divider"></div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <ul class="footer-links">
+          <li><a href="index.html">About</a></li>
+          <li><a href="methodology.html">Methodology</a></li>
+          <li><a href="access.html">Request Access</a></li>
+          <li><a href="mailto:contact@cofiindex.com">Contact</a></li>
+        </ul>
+        <div class="footer-copy">&copy; CoFi Index. All rights reserved.</div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('navToggle').addEventListener('click', () => {
+      document.getElementById('navLinks').classList.toggle('active');
+    });
+  </script>
+
+</body>
+</html>
