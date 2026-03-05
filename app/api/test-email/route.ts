@@ -16,18 +16,18 @@ export async function GET(req: Request) {
   }
 
   const fakeLead = {
-    id:         "test-lead-id",
-    email:      to,
-    domain:     "cofiradar.com",
-    score:      58,
-    reportSent: false,
+    id:            "test-lead-id",
+    email:         to,
+    domain:        "cofiradar.com",
+    brandName:     "CoFi Radar",
+    industry:      "SaaS",
+    competitors:   ["Brandwatch", "Mention"],
+    score:         58,
+    reportSent:    false,
     dripScheduled: false,
-    converted:  false,
-    scannedAt:  null,
-    createdAt:  new Date(),
-    updatedAt:  new Date(),
-    stripeCustomerId: null,
-    status:     "free",
+    converted:     false,
+    scannedAt:     null,
+    createdAt:     new Date(),
   } as Parameters<typeof sendFreeReport>[0]["lead"];
 
   await sendFreeReport({
