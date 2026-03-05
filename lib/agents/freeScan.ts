@@ -86,19 +86,48 @@ Return JSON:
 
 // ─── Query selection ─────────────────────────────────────────────────────────
 
-// Pick 2 queries per intent from the seed bank (10 total)
-async function pickQueries() {
-  const intents = ["pricing", "trust", "comparison", "discovery", "integration"];
-  const results = await Promise.all(
-    intents.map((intent) =>
-      prisma.query.findMany({
-        where: { intent, active: true },
-        take: 2,
-        orderBy: { priority: "asc" },
-      })
-    )
-  );
-  return results.flat();
+const FALLBACK_QUERY_TEMPLATES = [
+  { intent: "discovery",   text: "What is {brand} and what do they do?" },
+  { intent: "discovery",   text: "Tell me about {brand}" },
+  { intent: "pricing",     text: "How much does {brand} cost?" },
+  { intent: "pricing",     text: "What are {brand} pricing plans?" },
+  { intent: "trust",       text: "Is {brand} reliable and trustworthy?" },
+  { intent: "trust",       text: "What are the reviews of {brand}?" },
+  { intent: "comparison",  text: "How does {brand} compare to competitors?" },
+  { intent: "comparison",  text: "What are the best alternatives to {brand}?" },
+  { intent: "integration", text: "What does {brand} integrate with?" },
+  { intent: "integration", text: "What tools work with {brand}?" },
+];
+
+// Pick 2 queries per intent from the seed bank (10 total), fallback to templates
+async function pickQueries(brandName?: string) {
+  try {
+    const intents = ["pricing", "trust", "comparison", "discovery", "integration"];
+    const results = await Promise.all(
+      intents.map((intent) =>
+        prisma.query.findMany({
+          where: { intent, active: true },
+          take: 2,
+          orderBy: { priority: "asc" },
+        })
+      )
+    );
+    const dbQueries = results.flat();
+    if (dbQueries.length > 0) return dbQueries;
+  } catch {
+    // Query table may not exist yet — fall through to templates
+  }
+  // Fallback: use hardcoded templates with brand name substituted in
+  return FALLBACK_QUERY_TEMPLATES.map((q, i) => ({
+    id: `fallback-${i}`,
+    text: brandName ? q.text.replace(/{brand}/g, brandName) : q.text,
+    intent: q.intent,
+    active: true,
+    priority: i,
+    brandId: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  }));
 }
 
 // ─── Mini extraction ─────────────────────────────────────────────────────────
@@ -211,11 +240,7 @@ export async function runFreeScan(leadId: string): Promise<void> {
   });
 
   // 2. Pick 10 representative queries
-  const queries = await pickQueries();
-  if (queries.length === 0) {
-    console.warn("[freeScan] No queries found in seed bank — run prisma db seed first");
-    return;
-  }
+  const queries = await pickQueries(profile.name);
 
   function hydrate(text: string): string {
     const competitor = profile.competitors[0] ?? "a competitor";
