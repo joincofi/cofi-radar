@@ -61,7 +61,7 @@ export async function POST(req: Request) {
     if (existingByEmail) {
       const age = now - new Date(existingByEmail.createdAt).getTime();
       if (age < SEVEN_DAYS) {
-        // Return cached result if already scanned
+        // Return cached result if already scanned successfully
         if (existingByEmail.reportSent && existingByEmail.score !== null) {
           return NextResponse.json({
             status:  "already_sent",
@@ -69,11 +69,15 @@ export async function POST(req: Request) {
             score:   existingByEmail.score,
           });
         }
-        // Still scanning
-        return NextResponse.json({
-          status:  "pending",
-          message: "Your scan is already in progress. Report will arrive shortly.",
-        });
+        // If scan started less than 3 minutes ago, it's probably still running
+        const scanAge = now - new Date(existingByEmail.createdAt).getTime();
+        if (scanAge < 3 * 60 * 1000) {
+          return NextResponse.json({
+            status:  "pending",
+            message: "Your scan is already in progress. Report will arrive shortly.",
+          });
+        }
+        // Scan never completed (failed) — allow retry by falling through
       }
     }
 
