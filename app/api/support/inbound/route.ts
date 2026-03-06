@@ -4,7 +4,7 @@
  * Resend inbound email webhook — receives forwarded support emails,
  * passes them to the support agent.
  *
- * Set up in Resend: Inbound → route support@cofi-radar.com → this URL.
+ * Set up in Resend: Inbound → route support@cofiradar.com → this URL.
  */
 
 import { NextResponse } from "next/server";

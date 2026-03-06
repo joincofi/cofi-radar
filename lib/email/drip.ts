@@ -73,13 +73,13 @@ function day1Html(brandName: string, score: number, competitors: string[]): stri
     <p style="${P}">The free scan covered 10 queries. Our full weekly monitoring runs <strong>100 queries across 4 models</strong> — ChatGPT, Claude, Gemini, and Perplexity — giving you 400 data points every week. It also tracks ${compList} so you see exactly where you win and lose in AI answers.</p>
 
     <p style="${P}">If you want to see the full picture:</p>
-    <a href="${checkoutUrl}" style="${BTN}">Start monitoring for $999/mo</a>
+    <a href="${checkoutUrl}" style="${BTN}">Start monitoring for $199/mo</a>
     <p style="margin:16px 0 0;font-size:13px;color:#9B8E85;">Cancel anytime. First full report arrives within the hour.</p>
   </td></tr>
   <tr><td style="${FOOT_TD}">
     <p style="${FOOT_P}">CoFi Radar &middot; AI Visibility Intelligence<br>
     <a href="${checkoutUrl}" style="color:#C96442;text-decoration:none;">Start monitoring</a> &nbsp;&middot;&nbsp;
-    <a href="${BASE}" style="color:#9B8E85;text-decoration:none;">cofi-radar.com</a></p>
+    <a href="${BASE}" style="color:#9B8E85;text-decoration:none;">cofiradar.com</a></p>
   </td></tr>`);
 }
 
@@ -112,11 +112,11 @@ function day3Html(brandName: string, score: number, competitors: string[]): stri
 
     <p style="${P}">Your free scan gave you a score of ${score}. The full dashboard shows you the breakdown, the trend, and the exact answers behind every data point.</p>
 
-    <a href="${checkoutUrl}" style="${BTN}">See your full competitor picture — $999/mo</a>
+    <a href="${checkoutUrl}" style="${BTN}">See your full competitor picture — $199/mo</a>
   </td></tr>
   <tr><td style="${FOOT_TD}">
     <p style="${FOOT_P}">CoFi Radar &middot; AI Visibility Intelligence<br>
-    <a href="${BASE}" style="color:#9B8E85;text-decoration:none;">cofi-radar.com</a></p>
+    <a href="${BASE}" style="color:#9B8E85;text-decoration:none;">cofiradar.com</a></p>
   </td></tr>`);
 }
 
@@ -137,7 +137,7 @@ function day7Html(brandName: string, score: number): string {
     <p style="${P}">We ran your free scan 7 days ago. Since then, AI models have answered questions about your brand and your competitors thousands of times. We don't know what they said — and neither do you.</p>
 
     <div style="background:#FBF0EB;border-radius:8px;border:1px solid #F0D9CF;padding:20px;margin:0 0 20px;">
-      <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#1C1714;">What $999/mo gets you:</p>
+      <p style="margin:0 0 8px;font-size:14px;font-weight:700;color:#1C1714;">What $199/mo gets you:</p>
       <ul style="margin:0;padding:0 0 0 18px;font-size:14px;color:#6B5E56;line-height:1.9;">
         <li>400 AI answers per week (100 queries × 4 models)</li>
         <li>AI Visibility Score + trend vs prior weeks</li>
@@ -149,12 +149,12 @@ function day7Html(brandName: string, score: number): string {
     </div>
 
     <p style="${P}">If the timing isn't right, no problem. If it is:</p>
-    <a href="${checkoutUrl}" style="${BTN}">Start monitoring ${brandName} — $999/mo</a>
+    <a href="${checkoutUrl}" style="${BTN}">Start monitoring ${brandName} — $199/mo</a>
     <p style="margin:16px 0 0;font-size:13px;color:#9B8E85;">This is the last email in this sequence. We won't reach out again unless you start monitoring.</p>
   </td></tr>
   <tr><td style="${FOOT_TD}">
     <p style="${FOOT_P}">CoFi Radar &middot; AI Visibility Intelligence<br>
-    <a href="${BASE}" style="color:#9B8E85;text-decoration:none;">cofi-radar.com</a></p>
+    <a href="${BASE}" style="color:#9B8E85;text-decoration:none;">cofiradar.com</a></p>
   </td></tr>`);
 }
 

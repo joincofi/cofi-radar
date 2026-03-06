@@ -221,11 +221,11 @@ export default function LandingPage() {
               </a>
             </div>
 
-            {/* Monthly $999 */}
+            {/* Monthly $199 */}
             <div style={{ background: WHITE, border: "1.5px solid #E8C4B0", borderRadius: 14, padding: "32px 28px", boxShadow: "0 0 0 1px #E8C4B0, 0 8px 32px rgba(201,100,66,0.10)" }}>
               <p style={{ fontSize: 14, color: T3, fontWeight: 500, marginBottom: 6 }}>Monthly</p>
               <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginBottom: 4 }}>
-                <span style={{ fontSize: 40, fontWeight: 800, color: CORAL, letterSpacing: "-0.03em" }}>$999</span>
+                <span style={{ fontSize: 40, fontWeight: 800, color: CORAL, letterSpacing: "-0.03em" }}>$199</span>
                 <span style={{ fontSize: 14, color: T3 }}>/mo</span>
               </div>
               <p style={{ margin: "0 0 20px", fontSize: 12, color: T3 }}>Cancel anytime</p>

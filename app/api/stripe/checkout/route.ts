@@ -18,7 +18,7 @@ export async function GET(req: Request) {
   const plan  = searchParams.get("plan")  ?? "monthly";
   const email = searchParams.get("email") ?? "";
 
-  const base = process.env.NEXTAUTH_URL ?? "https://cofi-radar.com";
+  const base = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
 
   const priceId =
     plan === "yearly"

@@ -55,7 +55,7 @@ function FeatureRow({
             <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#3A3330", display: "inline-block" }} />
             <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#3A3330", display: "inline-block" }} />
             <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#3A3330", display: "inline-block" }} />
-            <span style={{ marginLeft: 8, fontSize: 11, color: "#4A4540", fontFamily: "monospace" }}>cofi-radar / {tag.toLowerCase().replace(/\s/g, "-")}</span>
+            <span style={{ marginLeft: 8, fontSize: 11, color: "#4A4540", fontFamily: "monospace" }}>cofiradar / {tag.toLowerCase().replace(/\s/g, "-")}</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
             {bullets.slice(0, 3).map((b, i) => (

@@ -118,7 +118,7 @@ function buildHtml(p: ReportParams): string {
 
     <p style="${P}">The free scan ran 10 queries across 2 models. Full monitoring runs <strong>100 queries × 4 models = 400 data points every week</strong>, with a weekly email digest, alert notifications, and a prioritized fix plan.</p>
 
-    <a href="${checkoutUrl}" style="${BTN}">Start weekly monitoring — $999/mo</a>
+    <a href="${checkoutUrl}" style="${BTN}">Start weekly monitoring — $199/mo</a>
     <p style="margin:16px 0 0;font-size:13px;color:#9B8E85;">Cancel anytime. First full report within the hour of signing up.</p>
   </td></tr>
 

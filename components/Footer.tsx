@@ -52,7 +52,7 @@ export default function Footer() {
             <div>
               <p style={{ fontSize: 11, color: "#3D3530", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 16 }}>Support</p>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                <a href={`mailto:${process.env.RESEND_FROM_EMAIL ?? "support@cofi-radar.com"}`} style={{ fontSize: 13, color: "#5C534B", textDecoration: "none" }}>Contact</a>
+                <a href={`mailto:${process.env.RESEND_FROM_EMAIL ?? "support@cofiradar.com"}`} style={{ fontSize: 13, color: "#5C534B", textDecoration: "none" }}>Contact</a>
               </div>
             </div>
           </div>

@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
     apiVersion: "2025-02-24.acacia",
   });
-  const base = process.env.NEXTAUTH_URL ?? "https://cofi-radar.com";
+  const base = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
   const { searchParams } = new URL(req.url);
 
   // Resolve client email — from session or query param (from email link)

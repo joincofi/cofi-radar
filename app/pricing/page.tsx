@@ -87,11 +87,11 @@ export default function PricingPage() {
             </a>
           </div>
 
-          {/* Monthly $999 */}
+          {/* Monthly $199 */}
           <div style={{ background: WHITE, border: "1.5px solid #E8C4B0", borderRadius: 16, padding: "36px 28px", boxShadow: "0 0 0 1px #E8C4B0, 0 8px 32px rgba(201,100,66,0.10)" }}>
             <p style={{ fontSize: 12, color: T3, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>Monthly</p>
             <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-              <span style={{ fontSize: 48, fontWeight: 800, color: CORAL, letterSpacing: "-0.035em", lineHeight: 1 }}>$999</span>
+              <span style={{ fontSize: 48, fontWeight: 800, color: CORAL, letterSpacing: "-0.035em", lineHeight: 1 }}>$199</span>
               <span style={{ fontSize: 15, color: T3 }}>/ month</span>
             </div>
             <p style={{ fontSize: 13, color: T3, marginBottom: 28 }}>Billed monthly, cancel anytime</p>
@@ -111,7 +111,7 @@ export default function PricingPage() {
 
         <p style={{ textAlign: "center", marginTop: 24, fontSize: 13, color: T3 }}>
           Need multiple brands?{" "}
-          <a href="mailto:hello@cofi-radar.com" style={{ color: CORAL, textDecoration: "none", fontWeight: 600 }}>Get in touch</a>
+          <a href="mailto:hello@cofiradar.com" style={{ color: CORAL, textDecoration: "none", fontWeight: 600 }}>Get in touch</a>
           {" "}for volume pricing.
         </p>
       </section>

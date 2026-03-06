@@ -116,7 +116,7 @@ async function processRefund(subscriptionId: string, invoiceId: string): Promise
 // ─── Response generation ──────────────────────────────────────────────────────
 
 async function generateResponse(intent: SupportIntent, email: EmailIn, context: string): Promise<string> {
-  const base = process.env.NEXTAUTH_URL ?? "https://cofi-radar.com";
+  const base = process.env.NEXTAUTH_URL ?? "https://cofiradar.com";
 
   const templates: Record<SupportIntent, string> = {
     refund_48h:     `You are a helpful customer support agent for CoFi Radar, an AI brand monitoring tool. A customer requested a refund within 48 hours and it has been processed. Write a brief, warm confirmation. Mention the refund will appear in 5-10 business days.`,

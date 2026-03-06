@@ -149,7 +149,7 @@ export default function AboutPage() {
             We read every email. If you have a question about CoFi Radar, a feature request, or feedback on your report, reach out directly.
           </p>
           <a
-            href="mailto:support@cofi-radar.com"
+            href="mailto:support@cofiradar.com"
             style={{ display: "inline-block", fontSize: 15, fontWeight: 700, color: WHITE, background: CORAL, padding: "14px 32px", borderRadius: 8, textDecoration: "none", marginBottom: 16 }}
           >
             Get in touch

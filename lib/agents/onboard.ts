@@ -81,7 +81,7 @@ async function scrapeHomepage(domain: string): Promise<string> {
   const url = domain.startsWith("http") ? domain : `https://${domain}`;
   try {
     const res = await fetch(url, {
-      headers: { "User-Agent": "CoFiRadar/1.0 (+https://cofi-radar.com/bot)" },
+      headers: { "User-Agent": "CoFiRadar/1.0 (+https://cofiradar.com/bot)" },
       signal: AbortSignal.timeout(10_000),
     });
     const html = await res.text();
