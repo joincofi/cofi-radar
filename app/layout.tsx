@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CoFi Radar — AI Visibility Intelligence",
-  description: "Find out what AI says about your brand — and fix it.",
+  title: "CoFi Radar — Coming Soon",
+  description: "Something new is coming.",
 };
 
 // Root layout is minimal — sub-sections have their own layouts.
